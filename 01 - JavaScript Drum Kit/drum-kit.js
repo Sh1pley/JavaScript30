@@ -2,11 +2,15 @@
 
 window.addEventListener('keydown', (event) => {
   playAudio();
+  transition();
 })
 
-window.addEventListener('keyup', (event) => {
-  fadeKey()
-})
+transition = () => {
+  const keys = Array.from(document.querySelectorAll('.key'))
+  keys.forEach( (key) => {
+    key.addEventListener('transitionend', fadeKey)
+  })
+}
 
 playAudio = () => {
   const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
@@ -22,7 +26,8 @@ highlightKey = () => {
   if (key) key.classList.add('playing');
 }
 
-fadeKey = () => {
-  const key = document.querySelector(`.key[data-key="${event.keyCode}"]`);
-  if (key) key.classList.remove('playing');
+function fadeKey(){
+  if (event.propertyName !== 'transform') return;
+
+  this.classList.remove('playing');
 }
